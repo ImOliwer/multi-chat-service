@@ -3,8 +3,8 @@ import express from "express";
 import { validate as validateEmail } from "email-validator";
 import UserModel from "../models/user";
 import { hash, verify as verifyHash } from "argon2";
-import { signToken, validateToken } from "../util/jwt";
-import { extractBearerToken } from "../util/express";
+import { signToken, validateToken } from "@util/jwt";
+import { extractBearerToken } from "@util/express";
 import UserTokenModel from "../models/usertokens";
 
 // instances
@@ -197,6 +197,7 @@ router.get("/profile", async (request, response) => {
 
   // validate token
   const validated = await validateToken(token, process.env.USER_TOKEN_SECRET);
+  console.log(validated);
 
   // if the token was invalid, respond with "bad token"
   if (!validated) {

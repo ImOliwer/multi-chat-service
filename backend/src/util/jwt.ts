@@ -1,5 +1,6 @@
 // imports
-import JsonWebToken, { JwtPayload } from "jsonwebtoken";
+import JsonWebToken from "jsonwebtoken";
+import { parse } from "relaxed-json";
 
 /**
  * Sign a token by payload, secret and expiration time.
@@ -25,15 +26,15 @@ export function signToken(
  * 
  * @param {string} token the token to be validated.
  * @param {string} secret the secret used to sign the token passed, and validate with.
- * @returns {Promise<JwtPayload | null>} promise to verify & fetch the result from.
+ * @returns {Promise<object | null>} promise to verify & fetch the result from.
  */
 export function validateToken(
   token: string,
   secret: string
-): Promise<JwtPayload | null> {
+): Promise<object | null> {
   return new Promise((resolve, _) =>
     JsonWebToken.verify(token, secret, (error, decoded) =>
-      resolve(error ? null : decoded)
+      resolve(error ? null : parse(decoded.toString()))
     )
   );
 }

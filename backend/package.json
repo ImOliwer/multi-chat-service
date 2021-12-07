@@ -35,11 +35,13 @@
         "mongodb": "^3.3.3",
         "mongoose": "^6.0.14",
         "morgan": "^1.9.1",
+        "relaxed-json": "^1.0.3",
         "rotating-file-stream": "^1.4.6",
         "ts-node-dev": "^1.0.0-pre.43",
         "typescript": "^3.6.3"
     },
     "devDependencies": {
-        "@types/jsonwebtoken": "^8.5.6"
+        "@types/jsonwebtoken": "^8.5.6",
+        "@types/relaxed-json": "^1.0.1"
     }
 }
