@@ -9,7 +9,7 @@ import { Request } from "express";
  */
 export function extractBearerToken(request: Request): string | undefined | null {
   // necessities
-  const { "Authorization": authorization } = request.headers;
+  const { "authorization": authorization } = request.headers;
 
   // ensure the presence of the header
   if (!authorization) {

@@ -9,8 +9,8 @@ const router = express.Router();
 router.post("/send", UserAuthMiddleware, async (request, response) => {
   // necessities
   const { to, message } = request.body;
-  const token = request.userToken;
-  console.log(token);
+  //const token = request.userToken;
+  //console.log(token);
 });
 
 // export the router instance

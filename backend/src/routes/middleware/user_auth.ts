@@ -1,8 +1,8 @@
 // imports
 import { Request, Response, NextFunction } from "express";
 import { extractBearerToken } from "../../util/express";
-import {validateToken} from "@util/jwt";
-import {User} from "@models/user";
+import { validateToken } from "../../util/jwt";
+import { User } from "../../models/user";
 
 /**
  * Verify the user auth passed through a request's headers.
@@ -34,7 +34,7 @@ export default async function verifyUserAuth(
   }
 
   // validate token
-  const validated = await validateToken(token, process.env.USER_TOKEN_SECRET);
+  const validated = await validateToken<User>(token, process.env.USER_TOKEN_SECRET);
 
   // ensure that the token isn't bad
   if (!validated) {
@@ -44,7 +44,7 @@ export default async function verifyUserAuth(
   }
 
   // add the token and user to the request and continue
-  request.user = validated as User;
+  request.user = validated;
   request.userToken = token;
   return next();
 }
