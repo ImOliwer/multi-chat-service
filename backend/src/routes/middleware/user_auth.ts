@@ -1,8 +1,8 @@
 // imports
 import { Request, Response, NextFunction } from "express";
-import { extractBearerToken } from "../../util/express";
-import { validateToken } from "../../util/jwt";
-import { User } from "../../models/user";
+import { extractBearerToken } from "@util/express";
+import { validateToken } from "@util/jwt";
+import { User } from "@models/user";
 
 /**
  * Verify the user auth passed through a request's headers.

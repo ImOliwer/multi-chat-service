@@ -1,11 +1,11 @@
 // imports
 import express from "express";
 import { validate as validateEmail } from "email-validator";
-import UserModel, { User } from "../models/user";
+import UserModel from "../models/user";
 import { hash, verify as verifyHash } from "argon2";
-import { signToken, validateToken } from "../util/jwt";
-import { extractBearerToken } from "../util/express";
+import { signToken } from "../util/jwt";
 import UserTokenModel from "../models/usertokens";
+import UserAuthMiddleware from "../routes/middleware/user_auth";
 
 // instances
 const router = express.Router();
@@ -111,7 +111,7 @@ router.post("/register", async (request, response) => {
   }
 
   // create & save user
-  new UserModel({
+  await new UserModel({
     name: exactName,
     email: exactEmail,
     lock: await hash(lock),
@@ -177,36 +177,9 @@ router.post("/login", async (request, response) => {
 });
 
 // fetch profile by auth
-router.get("/profile", async (request, response) => {
-  // necessities
-  const token = extractBearerToken(request);
-
-  // respond with an "Unauthorized" if the auth header is missing
-  if (token === undefined) {
-    return response.status(401).json({
-      message: "missing authorization header",
-    });
-  }
-
-  // respond with an invalid token format if token is null
-  if (token === null) {
-    return response.status(400).json({
-      message: "invalid token format - must be 'Bearer Token'",
-    });
-  }
-
-  // validate token
-  const validated = await validateToken<User>(token, process.env.USER_TOKEN_SECRET);
-
-  // if the token was invalid, respond with "bad token"
-  if (!validated) {
-    return response.status(400).json({
-      message: "bad token",
-    });
-  }
-
+router.get("/profile", UserAuthMiddleware, async (request, response) => {
   // fetch from the database to ensure presence of token
-  const fromDatabase = await UserTokenModel.findOne({ token });
+  const fromDatabase = await UserTokenModel.findOne({ token: request.userToken });
   if (!fromDatabase) {
     return response.status(400).json({
       message: "token is inactive",
@@ -216,7 +189,7 @@ router.get("/profile", async (request, response) => {
   // respond with the user's profile
   response.json({
     message: "successful profile fetch",
-    profile: validated,
+    profile: request.user,
   });
 });
 
