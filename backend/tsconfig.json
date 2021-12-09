@@ -5,13 +5,6 @@
     "outDir": "./build",
     "strict": false,
     "baseUrl": "./src",
-    "paths": {
-      "@root/*": ["/*"],
-      "@controllers/*": ["controllers/*"],
-      "@models/*": ["models/*"],
-      "@util/*": ["util/*"],
-      "@routes/*": ["routes/*"]
-    },
     "esModuleInterop": true
   },
   "include": ["./src"]
